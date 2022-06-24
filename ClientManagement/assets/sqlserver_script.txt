@@ -1,0 +1,125 @@
+﻿/****** Object:  Table [dbo].[client]    Script Date: 2022/06/22 15:24:45 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[client_address]') AND type in (N'U'))
+	ALTER TABLE [dbo].[client_address] DROP CONSTRAINT [fk_client_address_client]
+	ALTER TABLE [dbo].[client_address] DROP CONSTRAINT [fk_client_address_address]
+	DROP INDEX [idx_unique_non_clustered] ON [dbo].[client_address]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[address]') AND type in (N'U'))
+ALTER TABLE [dbo].[address] DROP CONSTRAINT [fk_address_address_type]
+GO
+ 
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[address_type]') AND type in (N'U'))
+DROP TABLE [dbo].[address_type]
+GO
+CREATE TABLE [dbo].[address_type](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] nvarchar(200) NOT NULL, 
+	[modified_date] [datetime] NOT NULL,
+ CONSTRAINT [pk_address_type_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+/****** Object:  Table [dbo].[client]    Script Date: 2022/06/22 15:24:45 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[client]') AND type in (N'U'))
+DROP TABLE [dbo].[client]
+GO
+
+/****** Object:  Table [dbo].[client]    Script Date: 2022/06/22 15:24:45 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[client](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[title] [nvarchar](8) NULL,
+	[first_name] [nvarchar](200) NOT NULL,
+	[middle_name] [nvarchar](200) NULL,
+	[last_name] [nvarchar](200) NOT NULL,
+	[suffix] [nvarchar](10) NULL,
+	[gender] [tinyint] NOT NULL,
+	[modified_date] [datetime] NOT NULL,
+ CONSTRAINT [pk_client_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+/****** Object:  Table [dbo].[client]    Script Date: 2022/06/22 15:24:45 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[address]') AND type in (N'U'))
+DROP TABLE [dbo].[address]
+GO
+
+CREATE TABLE [dbo].[address](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[address_line1] [nvarchar](60) NOT NULL,
+	[address_line2] [nvarchar](60) NULL,
+	[cell_phone_number] [nvarchar](60) NULL,
+	[residential_phone_number] [nvarchar](60) NULL,
+	[business_phone_number] [nvarchar](60) NULL,
+	[email] [nvarchar](300) NULL,
+	[city] [nvarchar](30) NOT NULL,
+	[state_province] [int] NOT NULL,
+	[address_type_id] [int] NOT NULL,
+	[postal_code] [nvarchar](15) NOT NULL,
+	[modified_date] [datetime] NOT NULL,
+ CONSTRAINT [pk_address_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[address]  WITH CHECK ADD  CONSTRAINT [fk_address_address_type] FOREIGN KEY([address_type_id])
+REFERENCES [dbo].[address_type] ([id])
+GO
+
+ALTER TABLE [dbo].[address] CHECK CONSTRAINT [FK_address_address_type]
+GO
+
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[client_address]') AND type in (N'U'))
+DROP TABLE [dbo].[client_address]
+GO
+CREATE TABLE [dbo].[client_address](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[client_id] bigint NOT NULL,
+	[address_id] bigint NOT NULL,
+	[modified_date] [datetime] NOT NULL,
+ CONSTRAINT [pk_client_address_id] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[client_address]  WITH CHECK ADD  CONSTRAINT [fk_client_address_address] FOREIGN KEY([address_id])
+REFERENCES [dbo].[address] ([id])
+GO
+
+ALTER TABLE [dbo].[client_address] CHECK CONSTRAINT [fk_client_address_address]
+GO
+
+ALTER TABLE [dbo].[client_address]  WITH CHECK ADD  CONSTRAINT [fk_client_address_client] FOREIGN KEY([client_id])
+REFERENCES [dbo].[client] ([id])
+GO
+
+ALTER TABLE [dbo].[client_address] CHECK CONSTRAINT [fk_client_address_client]
+GO
+
+
+CREATE UNIQUE NONCLUSTERED INDEX [idx_unique_non_clustered] ON [dbo].[client_address]
+(
+	[client_id] ASC,
+	[address_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO

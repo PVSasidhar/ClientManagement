@@ -1,0 +1,7 @@
+﻿-- Script Date: 2022/06/22 17:17  - ErikEJ.SqlCeScripting version 3.5.2.94
+INSERT INTO [dbo].[client]([title],[first_name],[middle_name],[last_name],[suffix],[gender],[modified_date])
+     VALUES ('MRS.','MARY','T.','WILLIAMS','',2,GETDATE());
+
+	 INSERT INTO [dbo].[client]([title],[first_name],[middle_name],[last_name],[suffix],[gender],[modified_date])
+     VALUES ('Mr.','Willam','T.','Lawson','',1,GETDATE());
+GO

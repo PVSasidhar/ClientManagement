@@ -1,0 +1,8 @@
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.csproj.AssemblyReference.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.AssemblyInfoInputs.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.AssemblyInfo.cs
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.csproj.CoreCompileInputs.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.RazorAssemblyInfo.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ClientManagement\obj\Debug\net5.0\ClientsWeb.RazorAssemblyInfo.cs

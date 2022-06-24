@@ -1,0 +1,6 @@
+﻿ insert into dbo.address_type (name, modified_date) Values ('Residential',GETDATE());
+ 
+ insert into dbo.address_type (name, modified_date) Values ('Work',GETDATE());
+ 
+ insert into dbo.address_type (name, modified_date) Values ('Postal',GETDATE());
+ GO

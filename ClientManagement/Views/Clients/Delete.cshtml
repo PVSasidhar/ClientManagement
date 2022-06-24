@@ -1,0 +1,39 @@
+﻿@model ApplicationCore.Clients.Client
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete Client</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Edit Client</h4>
+    <hr />
+     <div class="form-inline">
+        <div class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </div>
+        <div class = "col-sm-2">
+            @Html.DisplayFor(model => model.FirstName)
+        </div>
+        <div class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </div>
+        <div class = "col-sm-2">
+            @Html.DisplayFor(model => model.LastName)
+        </div>
+        <div class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Gender)
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-actions no-color">
+        <input class="btn btn-primary" type="submit" value="Delete" class="btn btn-default" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}  

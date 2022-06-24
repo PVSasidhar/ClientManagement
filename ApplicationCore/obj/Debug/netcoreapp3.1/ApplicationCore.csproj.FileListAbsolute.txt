@@ -1,0 +1,5 @@
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ApplicationCore\obj\Debug\netcoreapp3.1\ApplicationCore.csproj.AssemblyReference.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ApplicationCore\obj\Debug\netcoreapp3.1\ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ApplicationCore\obj\Debug\netcoreapp3.1\ApplicationCore.AssemblyInfoInputs.cache
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ApplicationCore\obj\Debug\netcoreapp3.1\ApplicationCore.AssemblyInfo.cs
+C:\Users\SasidharParupudi\source\repos\ClientManagement\ApplicationCore\obj\Debug\netcoreapp3.1\ApplicationCore.csproj.CoreCompileInputs.cache

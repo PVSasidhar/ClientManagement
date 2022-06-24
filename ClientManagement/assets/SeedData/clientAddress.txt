@@ -1,0 +1,9 @@
+﻿INSERT INTO [client_address]([client_id],[address_id],[modified_date])
+     VALUES(1,1,GETDATE());
+GO
+	INSERT INTO [client_address]([client_id],[address_id],[modified_date])
+     VALUES(1,2,GETDATE());
+GO
+ 	INSERT INTO [client_address]([client_id],[address_id],[modified_date])
+     VALUES(1,3,GETDATE());
+GO

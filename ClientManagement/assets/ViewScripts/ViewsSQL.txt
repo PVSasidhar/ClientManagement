@@ -1,0 +1,149 @@
+﻿
+DROP VIEW [dbo].[v_client_address]
+DROP VIEW [dbo].[v_client_address_details]
+DROP VIEW [dbo].[v_clients]
+DROP VIEW [dbo].[v_address]
+DROP VIEW [dbo].[v_file_details]
+DROP VIEW [dbo].[v_client_address_download_details]
+GO
+
+/****** Object:  View [dbo].[v_clients]    Script Date: 2022/06/23 09:09:40 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+CREATE view [dbo].[v_clients] AS
+SELECT  [id]
+      ,[title] AS [Title]
+      ,[first_name] AS [FirstName]
+      ,[middle_name] AS [MiddleName]
+      ,[last_name] AS [LastName]
+      ,[suffix] AS [Suffix]
+      , [gender] [Gender]
+      ,[modified_date] AS [ModifiedDate]
+  FROM [clients_db].[dbo].[client]
+GO
+
+CREATE VIEW [dbo].[v_address] AS
+SELECT [id] AS [Id]
+      ,[address_line1] AS [AddressLine1]
+      ,[address_line2] AS [AddressLine2]
+      ,[cell_phone_number] AS [CellPhoneNumber]
+      ,[residential_phone_number] AS [ResidentialPhoneNumber]
+      ,[business_phone_number] AS [BusinessPhoneNumber]
+      ,[email] AS [Email]
+      ,[city] AS [City]
+      ,[state_province] AS [StateProvince]
+      ,[address_type_id] AS [AddressTypeId]
+      ,[postal_code] AS [PostalCode]
+      ,[modified_date] AS [ModifiedDate]
+  FROM [dbo].[address]
+
+GO
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+CREATE VIEW [dbo].[v_client_address] AS
+SELECT [id] AS [Id]
+      ,[client_id] AS [ClientId]
+      ,[address_id] AS [AddressId]
+      ,[modified_date] AS [ModifiedDate]
+  FROM  [dbo].[client_address]
+GO
+
+CREATE VIEW [dbo].[v_client_address_details] AS
+SELECT address.[Id] AS AddressId
+      ,address.[AddressLine1]
+      ,address.[AddressLine2]
+      ,address.[CellPhoneNumber]
+      ,address.[ResidentialPhoneNumber]
+      ,address.[BusinessPhoneNumber]
+      ,address.[Email]
+      ,address.[City]
+      ,address.[StateProvince]
+      ,address.[AddressTypeId]
+      ,address.[PostalCode]
+      ,address.[ModifiedDate]
+	  ,clinet_address.[ClientId]
+  FROM [dbo].[v_address] address
+  LEFT JOIN  [dbo].[v_client_address] clinet_address on clinet_address.AddressId = address.Id
+GO
+
+CREATE View [dbo].[v_file_details] AS
+SELECT  
+       c.[Title]
+	   ,c.[FirstName]
+	   ,c.[LastName]
+	   ,CASE c.[Gender] WHEN 1 THEN 'Male' WHEN 2 THEN 'Female' ELSE 'Unknown' END AS [Gender]
+       ,cad.[AddressLine1]
+      ,cad.[AddressLine2]
+      ,cad.[Email]
+      ,cad.[City]
+      ,cad.[StateProvince]
+      ,CASE cad.[AddressTypeId] WHEN 1 THEN 'Residential' WHEN 2 THEN 'Work' ELSE 'Postal' END   AS [AddressType]
+      ,cad.[PostalCode]
+ 
+  FROM  [dbo].[v_client_address_details] cad
+  INNER JOIN [dbo].[v_clients] c ON c.Id = cad.ClientId
+GO
+
+
+CREATE VIEW [dbo].[v_client_address_download_details] AS
+/****** Script for SelectTopNRows command from SSMS  ******/
+ WITH residential_address AS 
+(SELECT [AddressId] AS [ResidentialAddressId]
+      ,[AddressLine1] AS [ResidentialAddressLine1]
+      ,[AddressLine2] AS [ResidentialAddressLine2]
+      ,[Email] AS [ResidentialEmail]
+      ,[City] AS [ResidentialCity]
+      ,[ClientId]
+  FROM [clients_db].[dbo].[v_client_address_details]
+  WHERE AddressTypeId = 1
+  ),
+ work_address AS 
+(SELECT [AddressId] AS [WorkAddressId]
+      ,[AddressLine1] AS [WorkAddressLine1]
+      ,[AddressLine2] AS [WorkAddressLine2]
+      ,[Email] AS [WorkEmail]
+      ,[City] AS [WorkCity]
+      ,[ClientId]
+  FROM [clients_db].[dbo].[v_client_address_details]
+  WHERE AddressTypeId = 2
+  ),
+ postal_address AS 
+(SELECT [AddressId] AS [PostalAddressId]
+      ,[AddressLine1] AS [PostalAddressLine1]
+      ,[AddressLine2] AS [PostalAddressLine2]
+      ,[Email] AS [PostalEmail]
+      ,[City] AS [PostalCity]
+      ,[ClientId]
+  FROM [clients_db].[dbo].[v_client_address_details]
+  WHERE AddressTypeId = 3
+    )
+
+SELECT  [id]
+      ,clients.[Title]
+      ,clients.[FirstName]
+      ,clients.[MiddleName]
+      ,clients.[LastName]
+      ,clients.[Suffix]
+      ,CASE clients.[Gender] WHEN 1 THEN 'Male' WHEN 2 THEN 'Female' ELSE 'Unknown' END AS [Gender] 
+      ,ISNULL(ra.[ResidentialAddressLine1],'') AS [ResidentialAddressLine1]
+	  ,ISNULL(ra.[ResidentialAddressLine2],'') AS [ResidentialAddressLine2]
+	  ,ISNULL(ra.[ResidentialEmail],'') AS [ResidentialEmail]
+	  ,ISNULL(ra.[ResidentialCity],'') AS [ResidentialCity]
+      ,ISNULL(wa.[WorkAddressLine1],'') AS [WorkAddressLine1]
+	  ,ISNULL(wa.[WorkAddressLine2],'') AS [WorkAddressLine2]
+	  ,ISNULL(wa.[WorkEmail],'') AS [WorkEmail]
+	  ,ISNULL(wa.[WorkCity],'') AS [WorkCity]
+      ,ISNULL(pa.[PostalAddressLine1],'') AS [PostalAddressLine1]
+	  ,ISNULL(pa.[PostalAddressLine2],'') AS [PostalAddressLine2]
+	  ,ISNULL(pa.[PostalEmail],'') AS [PostalEmail]
+	  ,ISNULL(pa.[PostalCity],'') AS [PostalCity]
+  FROM [clients_db].[dbo].[v_clients] clients
+  LEFT OUTER JOIN  residential_address ra ON ra.ClientId = clients.id
+  LEFT OUTER JOIN  work_address wa  ON wa.ClientId = clients.id
+  LEFT OUTER JOIN  postal_address pa ON pa.ClientId = clients.id
+  GO
