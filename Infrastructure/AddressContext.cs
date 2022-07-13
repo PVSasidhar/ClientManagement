@@ -1,12 +1,16 @@
 ﻿using ApplicationCore;
 using ApplicationCore.ClientAddress;
+using Infrastructure.Interfaces;
 
 namespace Infrastructure
 {
-    public class AddressContext : DBConnection, IAddressContext
+    public class AddressContext :IAddressContext
     {
-        public AddressContext(string connectionString) : base(connectionString)
+        private readonly IDBConnectionService _connService;
+
+        public AddressContext(IDBConnectionService connService)  
         {
+           _connService = connService;
         }
 
         public IEnumerable<Address> GetByIds(long[] Ids)
@@ -26,7 +30,7 @@ namespace Infrastructure
 
         void IDisposable.Dispose()
         {
-            throw new NotImplementedException();
+             
         }
 
         IEnumerable<Address> IDataContract<Address>.GetAll()

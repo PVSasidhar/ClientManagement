@@ -1,21 +1,23 @@
 ﻿using ApplicationCore.ClientAddress;
 using ApplicationCore.Clients;
+using Infrastructure.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace Infrastructure
 {
-    public class ClientContext : DBConnection, IClientContext
+    public class ClientContext : IClientContext
     {
-        public ClientContext(string connectionString) : base(connectionString)
+        private readonly IDBConnectionService _connService;
+        public ClientContext(IDBConnectionService connService, IAddressContext addressContext)  
         {
-
+            _connService = connService;
         }
         public Client Create(Client client)
         {
-            using (var sqlConnnection = CreateSqlConnection())
+            using (var sqlConnnection = _connService.CreateSqlConnection())
             {
-                OpenConnection(sqlConnnection);
+                _connService.OpenConnection(sqlConnnection);
                 var command = sqlConnnection.CreateCommand();
 
                 SqlParameter ClientId = new SqlParameter("@ClientId", client.Id);
@@ -75,9 +77,9 @@ namespace Infrastructure
         }
         public void Delete(Client client)
         {
-            using (var sqlConnnection = CreateSqlConnection())
+            using (var sqlConnnection = _connService.CreateSqlConnection())
             {
-                OpenConnection(sqlConnnection);
+                _connService.OpenConnection(sqlConnnection);
 
                 var clientAddressCommand = sqlConnnection.CreateCommand();
 
@@ -117,15 +119,14 @@ namespace Infrastructure
         }
         public void Dispose()
         {
-            throw new NotImplementedException();
         }
 
         public IEnumerable<Client> GetAll()
         {
             var result = new List<Client>();
-            using (var sqlConnnection = CreateSqlConnection())
+            using (var sqlConnnection = _connService.CreateSqlConnection())
             {
-                OpenConnection(sqlConnnection);
+                _connService.OpenConnection(sqlConnnection);
 
                 var command = sqlConnnection.CreateCommand();
 
@@ -159,9 +160,9 @@ namespace Infrastructure
             var result = new Client();
             if (Id > 0)
             {
-                using (var sqlConnnection = CreateSqlConnection())
+                using (var sqlConnnection = _connService.CreateSqlConnection())
                 {
-                    OpenConnection(sqlConnnection);
+                    _connService.OpenConnection(sqlConnnection);
                     var command = sqlConnnection.CreateCommand();
                     SqlParameter IdParam = new SqlParameter("@Id", Id);
                     command.Parameters.Add(IdParam);
@@ -183,9 +184,9 @@ namespace Infrastructure
         }
         public void Update(Client client)
         {
-            using (var sqlConnnection = CreateSqlConnection())
+            using (var sqlConnnection = _connService.CreateSqlConnection())
             {
-                OpenConnection(sqlConnnection);
+                _connService.OpenConnection(sqlConnnection);
 
                 var command = sqlConnnection.CreateCommand();
 
@@ -232,9 +233,9 @@ namespace Infrastructure
 
             if (ClientId > 0)
             {
-                using (var sqlConnnection = CreateSqlConnection())
+                using (var sqlConnnection = _connService.CreateSqlConnection())
                 {
-                    OpenConnection(sqlConnnection);
+                    _connService.OpenConnection(sqlConnnection);
                     var command = sqlConnnection.CreateCommand();
                     SqlParameter IdParam = new SqlParameter("@Id", ClientId);
                     command.Parameters.Add(IdParam);

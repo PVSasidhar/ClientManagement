@@ -1,14 +1,20 @@
 
+using ApplicationCore.ClientAddress;
 using ApplicationCore.Clients;
 using ApplicationCore.Core;
-using Infrastructure; 
- 
+using Infrastructure;
+using Infrastructure.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("SQLServer");
 
+var DBConnectionService1 = new DBConnectionService(connectionString); 
 builder.Services.AddConnections();
-builder.Services.AddSingleton((System.Func<System.IServiceProvider, IClientContext>)(_ => new ClientContext(connectionString)));
-builder.Services.AddSingleton((System.Func<System.IServiceProvider, IFileExporter>)(_ => new FileExporter(connectionString)));
+ 
+builder.Services.AddSingleton<IDBConnectionService>(DBConnectionService1) ;
+builder.Services.AddScoped<IClientContext,ClientContext > () ;
+builder.Services.AddScoped<IFileExporter,FileExporter> () ;
+builder.Services.AddScoped<IAddressContext, AddressContext>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

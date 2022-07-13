@@ -3,3 +3,5 @@
 ################################################################################
 
 /ApplicationCore/bin/Debug/net6.0
+/ClientManagement/bin/Debug/net6.0
+/Infrastructure/bin/Debug/net6.0

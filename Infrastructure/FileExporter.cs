@@ -1,21 +1,24 @@
 ﻿using ApplicationCore.Core;
+using Infrastructure.Interfaces;
 using System.Data;
 using System.Text;
 
 namespace Infrastructure
 {
-    public class FileExporter : DBConnection, IFileExporter
+    public class FileExporter : IFileExporter
     {
-        public FileExporter(string connectionString) : base(connectionString)
+        private readonly IDBConnectionService _connService ;
+        public FileExporter(IDBConnectionService connService) 
         {
+            _connService= connService;
         }
         public async Task<byte[]> GetCsv()
         {
             using var stream = new MemoryStream();
             using var writer = new StreamWriter(stream, Encoding.UTF8);
-            using (var sqlConnnection = CreateSqlConnection())
+            using (var sqlConnnection = _connService.CreateSqlConnection())
             {
-                OpenConnection(sqlConnnection);
+                _connService.OpenConnection(sqlConnnection);
 
                 var seperator = ",";
                 var command = sqlConnnection.CreateCommand();
