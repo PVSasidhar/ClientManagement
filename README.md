@@ -9,4 +9,6 @@ ClientsWeb Assets folder has the DB  Backup and also the required scripts
 
 Restore the bak file into your sqlserver and change the connection string in the appsettings.json and you should be good to go
 
-This is a .net core web app 6.0 framework
+This is a asp.net core web app 6.0 framework
+repository pattern
+c# , 3 tier , no entity framework
